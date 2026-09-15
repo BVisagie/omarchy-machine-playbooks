@@ -1,0 +1,13 @@
+#!/bin/bash
+# Re-install machine-playbooks awareness after omarchy update.
+set -euo pipefail
+
+for root in "${MACHINE_PLAYBOOKS:-}" \
+  "$HOME/Work/machine-playbooks" \
+  "$HOME/machine-playbooks" \
+  "$HOME/Work/omarchy-machine-playbooks"; do
+  [[ -n "$root" && -x "$root/common/playbooks/omarchy-playbooks-awareness/apply.sh" ]] || continue
+  exec "$root/common/playbooks/omarchy-playbooks-awareness/apply.sh"
+done
+
+exit 0
