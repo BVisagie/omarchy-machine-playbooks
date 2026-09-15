@@ -40,7 +40,13 @@ Saving locally, committing, and publishing are separate actions. Follow the
 user's authorized scope; do not repeatedly ask for permission already granted.
 Do not publish experiments as verified fixes or leave an authorized record only in chat.
 
-## Format
+## GitHub Actions versions
+
+When creating or updating workflows, verify each action's latest stable upstream
+release and use that release. Do not select versions from memory or use prereleases.
+Check compatibility and run CI after updating action versions.
+
+## Playbook format
 
 One problem per folder: `PLAYBOOK.md`, optional `apply.sh`, read-only
 `check.sh`, `rollback.sh`, and `files/`.
