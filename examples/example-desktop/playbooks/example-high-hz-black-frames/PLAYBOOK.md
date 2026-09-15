@@ -5,13 +5,13 @@ host: example-desktop
 depends_on: plugin:example.screens
 agnostic: false
 status: example
-last_verified: 2026-09-15
+last_verified: null
 needs_reboot: true
 ---
 
 # Example: 4K high-refresh black frames
 
-**Teaching example.** Do not run this as a real fix. `apply.sh` exits without changing the system unless `EXAMPLE_APPLY=1`.
+**Teaching example.** Do not run this as a real fix. `apply.sh` always exits without changing the system.
 
 A real kit of this kind belongs in *your* private fleet repo, with files that match **your** GPU and panel.
 
@@ -24,6 +24,11 @@ A real kit of this kind belongs in *your* private fleet repo, with files that ma
 ## Root cause
 
 (Fill in for a real playbook. Pattern: the link needs more bandwidth than the idle GPU clocks / colour depth / VRR path can hold — for example DP 1.4 + DSC on `amdgpu` while VRAM P-states drop. One paragraph, so the next agent does not re-investigate.)
+
+## Tested environment and evidence
+
+No hardware verification: teaching example only. Record actual versions and
+observations when authoring a real recipe; describe inferred causes as hypotheses.
 
 ## Apply
 

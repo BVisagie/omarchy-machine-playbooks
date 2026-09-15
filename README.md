@@ -1,51 +1,73 @@
 # Omarchy machine playbooks
 
-A GitHub **template** for [Omarchy](https://omarchy.org/) boxes: small restore kits that humans and coding agents can re-apply after a format, instead of rediscovering the same display, GPU, or Hyprland workaround.
+**Fix a problem today. Keep the solution for your next install.**
 
-Omarchy stays the OS. This repo only stores **your deltas** (udev, Limine drop-ins, Hyprland snippets) and the **why**.
+Got your monitor behaving, your GPU stable, or Hyprland just how you like it?
+Save what worked while it's fresh, ready for the next reinstall or AI chat.
 
-Use this template → create a repo (keep it **private** if it will hold host-specific quirks) → clone it onto the machine → tell an agent **restore this machine**.
+This template gives your [Omarchy](https://omarchy.org/) machines a memory:
+small, readable playbooks containing the fix, why it was needed, and how to
+apply, check, and undo it. Your coding agent can consult them before
+troubleshooting and help you record the next fix.
 
-## First day
+Keep fixes for one machine or share them across your own machines. Build your
+kit as you go, then use it after a reinstall with a simple request:
+**“Restore this machine.”**
+
+## Start your own playbooks
+
+Use this GitHub template to create your own repository. A private repository is
+recommended for personal machine information. Then:
 
 ```bash
-# after "Use this template" on GitHub
 git clone git@github.com:<you>/<your-playbooks>.git ~/Work/machine-playbooks
 cd ~/Work/machine-playbooks
 ./common/playbooks/omarchy-playbooks-awareness/apply.sh
+./common/playbooks/omarchy-playbooks-awareness/check.sh
 ```
 
-Then:
+Requires Bash and Python 3. Install as your normal user, without sudo. Custom
+clone locations work: the installer records the absolute repository path.
+Start a new agent session so it can discover the installed skill.
 
-1. Rename `machines/example-desktop/` to this box’s static hostname (`hostnamectl`).
-2. Fill `MACHINE.md` (motherboard, GPU PCI ID, monitor).
-3. Replace the example playbook with a real one, or delete it.
-4. After the next system fix, the agent should ask: this machine vs all machines, plugin-specific vs agnostic, **shall we push?**
-
-Agents read [AGENTS.md](AGENTS.md). Copilot and Claude load the same file via short pointers. How to write a kit: [docs/writing-a-playbook.md](docs/writing-a-playbook.md).
+Copy `machines/_template/` to a directory named after your static hostname.
+Fill the identity and hardware in `MACHINE.md`; add real playbooks as fixes
+are proven. Then ask an agent to restore this machine.
 
 ## Layout
 
-| Path | What |
+| Path | Purpose |
 |---|---|
-| `common/` | All-machines solutions (start with awareness so agents know this repo exists) |
-| `machines/<hostname>/` | Host-only kits. Folder name is `hostnamectl`’s Static hostname |
-| `machines/_template/` | Copy this for a new box |
-| `machines/example-desktop/` | **Sample only** — rename or delete |
+| `common/` | Reusable kits; check applicability before applying |
+| `machines/<hostname>/` | Machine-specific kits and hardware identity |
+| `machines/_template/` | Starting point for a new host |
+| `examples/` | Teaching material, never restore candidates |
+| `tests/` | Isolated regression tests |
+| `scripts/validate.py` | Repository structure and script validation |
 
-Matching also uses motherboard, GPU PCI ID, and monitor EDID, so a renamed host can still hit the right kit.
+Agents follow [AGENTS.md](AGENTS.md). See [writing a playbook](docs/writing-a-playbook.md)
+and [maintaining a personal copy](docs/template-updates.md).
 
-## What this is not
+## Recovery and boundaries
 
-- Not chezmoi / Ansible / a full dotfiles tree
-- Not an Omarchy fork — never commit `/usr/share/omarchy/`
-- Not a drop-in GPU fix. The example playbook teaches **shape**, and does not install clocks or kernel flags
+Each installer documents its checks and rollback. Awareness preserves original
+files in a local journal and refuses to overwrite later edits during rollback.
+See its [playbook](common/playbooks/omarchy-playbooks-awareness/PLAYBOOK.md).
 
-## What not to commit
+This repository stores small deltas, not full home directories or an Omarchy
+fork. Do not commit secrets, tokens, full configuration dumps, local backup
+journals, or files from `/usr/share/omarchy/`. Review changes before publishing.
 
-- Secrets, LUKS passphrases, tokens
-- Full `~/.config` dumps (Hyprland: small deltas only)
-- Anything under `/usr/share/omarchy/` (stock `~/.agents/skills/omarchy` is a symlink there)
+## Development
+
+```bash
+python3 -m pip install -r requirements-dev.txt
+python3 scripts/validate.py
+python3 -m unittest discover -s tests -v
+```
+
+Install ShellCheck separately through your OS package manager; validation
+requires it. Tests use temporary directories and mocked system interfaces.
 
 ## License
 
