@@ -1,10 +1,20 @@
 # Omarchy machine playbooks
 
-Small restore kits for [Omarchy](https://omarchy.org/), written for humans and
-coding agents. Keep your configuration deltas together with their symptoms,
-reasoning, verification, and rollback so the next restore starts from evidence.
+**Fix a problem today. Keep the solution for your next install.**
 
-## First day
+Got your monitor behaving, your GPU stable, or Hyprland just how you like it?
+Save what worked while it's fresh, ready for the next reinstall or AI chat.
+
+This template gives your [Omarchy](https://omarchy.org/) machines a memory:
+small, readable playbooks containing the fix, why it was needed, and how to
+apply, check, and undo it. Your coding agent can consult them before
+troubleshooting and help you record the next fix.
+
+Keep fixes for one machine or share them across your own machines. Build your
+kit as you go, then use it after a reinstall with a simple request:
+**“Restore this machine.”**
+
+## Start your own playbooks
 
 Use this GitHub template to create your own repository. A private repository is
 recommended for personal machine information. Then:
