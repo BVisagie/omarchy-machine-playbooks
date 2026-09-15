@@ -1,13 +1,10 @@
 # Omarchy on these machines
 
-Read the packaged Omarchy skill (`~/.agents/skills/omarchy/SKILL.md`) for live commands. On stock Omarchy that path is a **symlink** into `/usr/share/omarchy` — never write through it.
+Consult the installed Omarchy skill for supported system commands. Packaged
+skills may be symlinks into `/usr/share/omarchy`; do not write through them.
 
-Hard rules:
+User configuration belongs in `~/.config/`. Awareness is a separate user
+skill in `~/.agents/skills/machine-playbooks/`; it never patches Omarchy.
 
-- Never edit `/usr/share/omarchy/` or `~/.grok/bundled/skills/`. Package updates overwrite both.
-- User config: `~/.config/hypr/`, `~/.config/omarchy/`.
-- `omarchy hook install <type> <script>` for hooks.
-- Privileged: `sudo` in a terminal, `pkexec` from an agent.
-- `omarchy debug` always with `--no-sudo --print`.
-
-Awareness lives in `~/.agents/skills/machine-playbooks/`. After any system fix, follow AGENTS.md: ask scope, plugin-agnostic vs tied, and whether to push to this repo.
+Follow AGENTS.md when restoring or recording fixes. Existing authorization
+applies; publishing to GitHub remains distinct from saving locally.

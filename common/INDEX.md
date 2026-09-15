@@ -1,7 +1,7 @@
-# Common (all machines)
+# Common playbooks
 
-Apply these on every Omarchy box after a format, before host-specific playbooks.
+Shared location does not mean every recipe applies to every machine.
 
 | Playbook | When |
 |---|---|
-| [omarchy-playbooks-awareness](playbooks/omarchy-playbooks-awareness/PLAYBOOK.md) | Always. Installs the user skill + post-update hook so agents ask to save fixes here. |
+| [omarchy-playbooks-awareness](playbooks/omarchy-playbooks-awareness/PLAYBOOK.md) | Install once to select this repository, expose the user skill, and maintain awareness after updates. |

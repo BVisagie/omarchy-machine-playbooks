@@ -1,42 +1,58 @@
 # Writing a playbook
 
-One folder, one problem, under `common/playbooks/` or `machines/<hostname>/playbooks/`.
-
-```
-my-fix/
-├── PLAYBOOK.md    # required — what, why, apply, verify, rollback
-├── apply.sh       # optional — idempotent install
-└── files/         # optional — the actual udev rule, script, snippet
-```
+One folder per problem under `common/playbooks/` or
+`machines/<hostname>/playbooks/`. Required: `PLAYBOOK.md`.
+Optional: `apply.sh`, read-only `check.sh`, `rollback.sh`, and `files/`.
 
 ## Front matter
 
 ```yaml
 id: short-kebab-id
-scope: machine          # or common
-host: my-hostname       # or all
-depends_on: none        # or plugin:im0001gt.screens or app:steam
-agnostic: true          # false if it only works with that plugin/app
-status: applied         # stub | example
-last_verified: 2026-09-15
+scope: machine
+host: my-hostname
+depends_on: none
+agnostic: true
+status: draft
+last_verified: null
 needs_reboot: false
 ```
 
-If `depends_on` is not `none`, `PLAYBOOK.md` must include an **agnostic path** (what to do when that plugin is missing).
+Use `scope: common` with `host: all`. Dependencies may be `none`,
+`plugin:<id>`, or `app:<name>`. Describe a supported agnostic path when a
+dependency is absent, or explicitly state that no fallback exists.
+
+Statuses describe recipe maturity, never current machine state:
+
+- `draft`: not yet proven on its intended hardware.
+- `verified`: supported by recorded successful checks.
+- `example`: teaching material outside the restore inventory.
+- `retired`: retained for history; do not automatically apply.
+
+`last_verified` is the date of actual verification, or null. Updating scripts
+does not reset it. Explain which version was tested and which changes remain
+unverified on hardware.
 
 ## Body
 
-Keep it short enough that a model will follow it instead of re-investigating:
+Include Symptoms, Root cause, Apply, Verify, Rollback, and What not to change.
+A working workaround does not establish its mechanism: distinguish a confirmed
+cause from a hypothesis. Link supporting upstream issues or primary documentation.
 
-1. **Symptoms** — what the user sees
-2. **Root cause** — one paragraph
-3. **Apply** — `apply.sh` or exact steps
-4. **Verify** — commands and expected output
-5. **Rollback**
-6. **What not to change**
+Under Tested environment and evidence, record Omarchy, kernel, compositor,
+relevant plugin versions, hardware, commands/results, and any unknowns.
+Document cold boot, suspend/resume, and physical symptoms separately from
+file installation and mocked tests. Record power/performance tradeoffs where relevant.
 
-See `machines/example-desktop/playbooks/example-high-hz-black-frames/` for a filled-in sample. That sample does **not** change the system unless `EXAMPLE_APPLY=1`.
+## Script behavior
 
-## After it works
+Check target hardware and dependencies before mutations. Avoid broad device
+globs and full config replacements. Preserve original content, retain that
+backup on repeat application, and refuse rollback over later edits. Use
+argument arrays for privilege escalation, not interpolated shell code.
 
-Ask (see AGENTS.md): this machine vs `common/`, plugin-tied vs agnostic, then **shall we push?**
+`check.sh` must not change files, devices, profiles, or caches. Explain exit
+codes and pending reboot. An installer must report incomplete steps honestly.
+Keep examples no-ops. See [the example](../examples/example-desktop/playbooks/example-high-hz-black-frames/PLAYBOOK.md).
+
+After a successful fix, follow AGENTS.md to record it locally or publish it
+within the user's existing authorization.

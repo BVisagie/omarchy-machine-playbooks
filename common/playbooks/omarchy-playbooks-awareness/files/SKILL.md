@@ -1,32 +1,29 @@
 ---
 name: machine-playbooks
-description: >
-  Restore and record Omarchy machine-specific and all-machine system fixes
-  from a machine-playbooks repo (this template or a private copy). Use when
-  customizing Hyprland, ~/.config/omarchy/, displays, GPU, kernel cmdline,
-  udev, after a format, restoring a machine, or when a system workaround
-  just landed. Triggers: restore this machine, format, playbooks, system
-  fix, push to common, /machine-playbooks.
+description: Restore known Omarchy machine fixes and record newly proven system workarounds in the user's playbooks repository. Use for machine restoration or display, GPU, Hyprland, udev, and boot configuration work that may have a recorded solution.
 ---
 
 # Machine playbooks
 
-Before solving a desktop/GPU/display/Omarchy config problem from scratch, open the playbooks repo and match a kit.
+Locate the selected repository with:
 
-## Find the repo
+```bash
+python3 ~/.agents/skills/machine-playbooks/awareness.py resolve
+```
 
-1. `$MACHINE_PLAYBOOKS`
-2. `~/Work/machine-playbooks`
-3. `~/machine-playbooks`
-4. `~/Work/omarchy-machine-playbooks`
+Resolution uses explicit `MACHINE_PLAYBOOKS`, then the saved absolute path in
+`~/.config/machine-playbooks/repo-path`, then a unique conventional checkout.
+If an explicit or saved path is invalid, repair that selection; do not silently
+switch repositories. Before awareness is installed, ask where the user's copy
+lives if the active workspace is not that repository.
 
-If it is missing, ask where the user’s copy of this template lives. Then read `AGENTS.md` there and follow it. Do not invent a second process.
+Read its `AGENTS.md`, `common/INDEX.md`, and the matching machine's documentation.
+Start with the recorded solution, checking hardware, dependencies, and version
+assumptions. Examples and retired recipes are not restore candidates.
 
-## Order
+Use existing user authorization; clarify only unresolved choices. After a proven
+new fix, propose a machine-specific or common record. Saving locally and pushing
+to GitHub are separate actions; follow the scope the user authorized.
 
-1. Identify host (`hostnamectl`, GPU, monitor).
-2. Read `common/INDEX.md`, then `machines/<hostname>/`. Skip `example-desktop` unless that is the real hostname.
-3. Ask the apply/save questions in `AGENTS.md`. Always ask **“Shall we push this to the playbooks repo?”** after a new system fix (`common/` vs this machine).
-4. Apply matching playbooks; do not re-research a solved issue.
-
-Never edit `/usr/share/omarchy/` or `~/.grok/bundled/skills/`.
+Never write through packaged skill symlinks or modify `/usr/share/omarchy/` or
+`~/.grok/bundled/skills/`.
