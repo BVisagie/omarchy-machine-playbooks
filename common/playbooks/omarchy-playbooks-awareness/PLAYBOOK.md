@@ -70,6 +70,13 @@ is complete; it is local state, not repository content.
 
 ### Existing installations
 
+After pulling this guard into a checkout with awareness already installed,
+review the new `AGENTS.md`, this playbook, and installer, then run `./apply.sh`
+directly before the next Omarchy update. The old installed `awareness.py`
+has no source digest check, so its next post-update run could apply the new
+source unreviewed. Direct application installs the guarded version and records
+its source digest.
+
 On the first upgrade, existing awareness files become the rollback baseline.
 Old installers did not save originals. They may also have left
 `playbooks.md` in the user skill and a marked section between

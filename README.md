@@ -29,6 +29,11 @@ system before running `apply.sh`. A direct install records the awareness
 source reviewed for the post-update hook; if that source later changes, the
 hook refuses to rerun it until you review and apply it directly again.
 
+If awareness is already installed, review this change and run the awareness
+`apply.sh` directly after pulling it, **before the next Omarchy update**. The
+previously installed post-update hook has no source check; its first run after
+the pull could otherwise apply the changed source without review.
+
 ```bash
 ./common/playbooks/omarchy-playbooks-awareness/apply.sh
 ./common/playbooks/omarchy-playbooks-awareness/check.sh
