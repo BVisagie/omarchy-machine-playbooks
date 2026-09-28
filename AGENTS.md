@@ -37,24 +37,35 @@ Before installation, use the workspace the user selected, or ask where their cop
 A past successful restore proves only that a recipe worked in its recorded
 environment. Before each restore, compare the current machine and installed
 Omarchy, kernel, compositor, packages, and relevant app/plugin versions with
-the playbook's assumptions. Check whether the symptom still exists, whether
+the playbook's assumptions where they matter. Check whether the symptom still exists, whether
 Omarchy or another upstream component now fixes it, and whether the proposed
 changes would conflict with current defaults, APIs, packages, or user settings.
-Use current upstream documentation, release notes, and issue status where
-available; do not infer current safety from `last_verified` alone.
+For a kit that depends on an upstream fix, API, package, or third-party source,
+consult current documentation, release notes, issues, and advisories relevant
+to that dependency. Purely local configuration kits still need the current
+system and conflict check, but do not require unrelated upstream research.
+Do not infer current safety from `last_verified` alone.
 
 Before fetching, installing, or executing a third-party project, verify its
 current source and package origin, maintainership, release or commit being
 installed, and relevant security advisories or compromise reports. Check
 published signatures or checksums when provided. A historical URL or pinned
 version is a starting point, not proof that the project is still safe. If
-current trust cannot be established, defer the affected external step. A
-network failure is not a clean security result.
+current trust cannot be established, stop that kit before making changes. A
+network failure is not a clean security result. When offline and a kit is
+needed to restore connectivity, a checksum pinned in the repository can verify
+the exact artifact bytes, but cannot establish current upstream trust. Explain
+that limit and the specific risk; proceed only if the user explicitly accepts
+that risk for this kit. Never treat a generic restore request as that acceptance.
+Do not run a source known to be compromised.
 
 Decide and report for each candidate: apply it; skip it because it is already
-fixed or unnecessary; or stop because it is incompatible, harmful, or cannot
-be verified. If a recipe could break Omarchy or cause another issue, tell the
-user the specific conflict and likely effect **before making changes**.
+fixed or unnecessary; or stop the entire kit before any Apply step because it
+is incompatible, harmful, or cannot be verified. Do not partially apply a kit
+with deferred steps; its check may otherwise fail. If a recipe could break
+Omarchy or cause another issue, tell the user the specific conflict and likely
+effect **before making changes**. An informed, explicit acceptance of that
+stated risk may authorize the kit; a generic restore request does not.
 Offer a current safe alternative or a playbook revision when possible. Do not
 run the affected installer merely because the user asked to restore the old
 recipe. Keep read-only diagnosis and unaffected kits moving where safe.

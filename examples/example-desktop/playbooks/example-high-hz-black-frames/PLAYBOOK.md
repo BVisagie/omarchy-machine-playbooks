@@ -25,6 +25,12 @@ A real kit of this kind belongs in *your* private fleet repo, with files that ma
 
 (Fill in for a real playbook. Pattern: the link needs more bandwidth than the idle GPU clocks / colour depth / VRR path can hold — for example DP 1.4 + DSC on `amdgpu` while VRAM P-states drop. One paragraph, so the next agent does not re-investigate.)
 
+## Assumptions
+
+Teaching placeholder only: a real kit must name the tested Omarchy, kernel,
+compositor, GPU driver, panel, cable, and plugin versions and the exact behavior
+that requires the workaround. Confirm those assumptions on the target machine.
+
 ## Tested environment and evidence
 
 No hardware verification: teaching example only. Record actual versions and

@@ -34,7 +34,7 @@ unverified on hardware.
 
 ## Body
 
-Include Symptoms, Root cause, Apply, Verify, Rollback, and What not to change.
+Include Symptoms, Root cause, Assumptions, Apply, Verify, Rollback, and What not to change.
 A working workaround does not establish its mechanism: distinguish a confirmed
 cause from a hypothesis. Link supporting upstream issues or primary documentation.
 
@@ -44,7 +44,7 @@ Document cold boot, suspend/resume, and physical symptoms separately from
 file installation and mocked tests. Record power/performance tradeoffs where relevant.
 
 Give a future restorer enough information to repeat the fresh preflight in
-`AGENTS.md`: state the versions and behavior the workaround assumes, the
+`AGENTS.md`: under Assumptions, state the versions and behavior the workaround assumes, the
 upstream issue or documentation that explains why it was needed, and any
 known conflicting defaults or changes. For external projects, name the
 canonical source and install channel, the release or commit used, and the

@@ -45,7 +45,7 @@ def validate(root):
                     assert relative[0] == "common" and data["host"] == "all", "common host mismatch"
                 else:
                     assert relative[:2] == ("machines", data["host"]), "machine host mismatch"
-                for heading in ("Symptoms", "Root cause", "Apply", "Verify", "Rollback", "What not to change", "Tested environment and evidence"):
+                for heading in ("Symptoms", "Root cause", "Assumptions", "Apply", "Verify", "Rollback", "What not to change", "Tested environment and evidence"):
                     assert f"## {heading}" in text, f"missing {heading}"
             except (AssertionError, TypeError, KeyError, ValueError, yaml.YAMLError) as error:
                 failures.append(f"{path.relative_to(root)}: {error}")

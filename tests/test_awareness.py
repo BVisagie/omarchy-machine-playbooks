@@ -52,6 +52,7 @@ class AwarenessTests(unittest.TestCase):
         self.assertEqual(skill.read_text(), "original")
         self.assertEqual(skill.stat().st_mode & 0o777, 0o640)
         self.assertFalse((self.home / ".config/machine-playbooks/repo-path").exists())
+        self.assertFalse((self.home / ".local/state/machine-playbooks/awareness/reviewed-source").exists())
 
     def test_conflict_prevents_any_rollback(self):
         self.apply()
@@ -101,6 +102,29 @@ class AwarenessTests(unittest.TestCase):
             run.return_value.returncode = 7
             self.assertEqual(aw.awareness("update", self.home, environ={}), 7)
             self.assertEqual(run.call_args.args[0], [str(self.repo / "common/playbooks/omarchy-playbooks-awareness/apply.sh")])
+
+    def test_update_refuses_changed_installer_before_running_it(self):
+        self.apply()
+        installer = self.repo / "common/playbooks/omarchy-playbooks-awareness/apply.sh"
+        installer.write_text(installer.read_text() + "\n# changed\n")
+        with patch.object(aw.subprocess, "run") as run, self.assertRaisesRegex(RuntimeError, "source changed"):
+            aw.awareness("update", self.home, environ={})
+        run.assert_not_called()
+        with self.assertRaisesRegex(RuntimeError, "out of date"):
+            aw.awareness("check", self.home, environ={})
+        self.apply()
+        with patch.object(aw.subprocess, "run") as run:
+            run.return_value.returncode = 0
+            self.assertEqual(aw.awareness("update", self.home, environ={}), 0)
+            run.assert_called_once()
+
+    def test_update_refuses_changed_installed_source(self):
+        self.apply()
+        source = self.repo / "common/playbooks/omarchy-playbooks-awareness/files/SKILL.md"
+        source.write_text(source.read_text() + "\nChanged guidance.\n")
+        with patch.object(aw.subprocess, "run") as run, self.assertRaisesRegex(RuntimeError, "source changed"):
+            aw.awareness("update", self.home, environ={})
+        run.assert_not_called()
 
     def test_interrupted_upgrade_preserves_recovery(self):
         target = self.base / "target"

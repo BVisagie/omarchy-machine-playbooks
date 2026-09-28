@@ -4,6 +4,7 @@
 import base64
 import contextlib
 import fcntl
+import hashlib
 import json
 import os
 from pathlib import Path
@@ -143,20 +144,37 @@ def awareness_files(home, repo):
             (home / ".config/machine-playbooks/repo-path", (str(repo) + "\n").encode(), 0o600)]
 
 
+def source_digest(repo):
+    """Identify the reviewed installer and every source file it installs."""
+    kit = repo / "common/playbooks/omarchy-playbooks-awareness"
+    digest = hashlib.sha256()
+    for relative in ("apply.sh", "files/SKILL.md", "files/awareness.py",
+                     "files/50-machine-playbooks-awareness"):
+        data = (kit / relative).read_bytes()
+        digest.update(relative.encode() + b"\0" + len(data).to_bytes(8, "big") + data)
+    return digest.hexdigest()
+
+
 def awareness(action, home, repo=None, environ=None):
     environ = os.environ if environ is None else environ
     state = home / ".local/state/machine-playbooks/awareness/files.json"
+    reviewed = state.with_name("reviewed-source")
     if action == "resolve":
         print(resolve_repo(home, environ))
         return 0
     if action == "update":
         root = resolve_repo(home, environ)
+        if snapshot(reviewed) != content((source_digest(root) + "\n").encode(), 0o600):
+            raise RuntimeError("Awareness source changed since the last direct apply; review it and run apply.sh manually")
         return subprocess.run([str(root / "common/playbooks/omarchy-playbooks-awareness/apply.sh")], check=False).returncode
     if action == "check":
         root = resolve_repo(home, environ)
         journal = FileChanges(state)
         expected = awareness_files(home, root)
         bad = [str(path) for path, data, mode in expected if snapshot(path) != content(data, mode)]
+        reviewed_source = content((source_digest(root) + "\n").encode(), 0o600)
+        if snapshot(reviewed) != reviewed_source:
+            bad.append(str(reviewed))
         if not journal.entries or bad or journal.check():
             raise RuntimeError("Awareness incomplete or out of date: " + ", ".join(bad or journal.check()))
         print(f"Awareness verified: {root}")
@@ -167,11 +185,13 @@ def awareness(action, home, repo=None, environ=None):
             if repo is None or not repo_valid(repo):
                 raise RuntimeError("Installer must be run from a complete playbooks repository")
             journal.install(awareness_files(home, repo.resolve()))
+            write_snapshot(reviewed, content((source_digest(repo.resolve()) + "\n").encode(), 0o600))
             print(f"Awareness installed for {repo.resolve()}")
         elif action == "rollback":
             if not journal.entries:
                 raise RuntimeError("No installation journal; follow the documented legacy cleanup")
             journal.rollback()
+            safe_path(reviewed).unlink(missing_ok=True)
             print("Awareness files restored; empty directories remain.")
         else:
             raise RuntimeError(f"Unknown action: {action}")
