@@ -22,12 +22,26 @@ recommended for personal machine information. Then:
 ```bash
 git clone git@github.com:<you>/<your-playbooks>.git ~/Work/machine-playbooks
 cd ~/Work/machine-playbooks
+```
+
+Review the cloned `AGENTS.md` and awareness playbook against the current
+system before running `apply.sh`. A direct install records the awareness
+source reviewed for the post-update hook; if that source later changes, the
+hook refuses to rerun it until you review and apply it directly again.
+
+If awareness is already installed, review this change and run the awareness
+`apply.sh` directly after pulling it, **before the next Omarchy update**. The
+previously installed post-update hook has no source check; its first run after
+the pull could otherwise apply the changed source without review.
+
+```bash
 ./common/playbooks/omarchy-playbooks-awareness/apply.sh
 ./common/playbooks/omarchy-playbooks-awareness/check.sh
 ```
 
 Requires Bash and Python 3. Install as your normal user, without sudo. Custom
 clone locations work: the installer records the absolute repository path.
+For later kits, follow the [fresh restore preflight](AGENTS.md#fresh-restore-preflight).
 Start a new agent session so it can discover the installed skill.
 
 Copy `machines/_template/` to a directory named after your static hostname.

@@ -19,6 +19,20 @@ Agents rediscover recorded fixes or lose the selected repository after an update
 
 Discovery relied on conventional paths without recording the selected checkout.
 
+## Assumptions
+
+The selected checkout has the repository layout and `AGENTS.md` required by
+`awareness.py`. The machine provides Bash and Python 3 with the standard library
+modules used by the installer, including `fcntl`; this kit has no third-party
+Python package dependency. Omarchy runs executable user hooks in
+`~/.config/omarchy/hooks/post-update.d/` after updates. Confirm that hook path
+and invocation behavior against the installed Omarchy before restoring; this
+historical record does not establish compatibility with a future hook API.
+The installer writes only to the user's home directory, so it must run as the
+normal user. The post-update hook re-applies only an awareness source whose
+installer and installed files match the last direct `apply.sh`; a changed source
+requires review and a new direct install.
+
 ## Apply
 
 Run `./apply.sh` as your normal user with Python 3 installed. It installs a
@@ -36,11 +50,14 @@ Original bytes and permissions are stored in
 Repeat installation retains the original backup. Later edits cause a conflict
 requiring review. New files are written atomically; an interrupted run leaves
 a journal for retry or rollback.
+Direct application records the reviewed awareness source digest in local state.
+The post-update hook refuses to run a changed installer or changed installed
+source files and reports that a new direct review and application is needed.
 
 ## Verify
 
 Run `./check.sh` (0 verified, 1 incomplete/error). It checks the selected repo,
-installed content and permissions, and journal without writing files.
+installed content and permissions, source digest, and journal without writing files.
 Start a new agent session and confirm the machine-playbooks skill is discoverable;
 file checks alone cannot prove a particular agent loaded it.
 
@@ -48,10 +65,17 @@ file checks alone cannot prove a particular agent loaded it.
 
 Run `./rollback.sh`. It restores original files and removes files newly created
 by this installer. It checks all journal entries for later edits before restoring
-any. Empty directories and the lock file remain. Keep the journal until recovery
+any. It removes the reviewed source digest. Empty directories and the lock file remain. Keep the journal until recovery
 is complete; it is local state, not repository content.
 
 ### Existing installations
+
+After pulling this guard into a checkout with awareness already installed,
+review the new `AGENTS.md`, this playbook, and installer, then run `./apply.sh`
+directly before the next Omarchy update. The old installed `awareness.py`
+has no source digest check, so its next post-update run could apply the new
+source unreviewed. Direct application installs the guarded version and records
+its source digest.
 
 On the first upgrade, existing awareness files become the rollback baseline.
 Old installers did not save originals. They may also have left

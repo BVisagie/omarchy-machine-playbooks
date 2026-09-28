@@ -21,6 +21,9 @@ Read its `AGENTS.md`, `common/INDEX.md`, and the matching machine's documentatio
 Start with the recorded solution, checking hardware, dependencies, and version
 assumptions. Examples and retired recipes are not restore candidates.
 
+Before applying any playbook, follow the selected repository's `AGENTS.md`
+section `## Fresh restore preflight`, including its decision and reporting rules.
+
 Use existing user authorization; clarify only unresolved choices. After a proven
 new fix, propose a machine-specific or common record. Saving locally and pushing
 to GitHub are separate actions; follow the scope the user authorized.
