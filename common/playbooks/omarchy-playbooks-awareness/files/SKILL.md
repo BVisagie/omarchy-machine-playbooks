@@ -21,6 +21,15 @@ Read its `AGENTS.md`, `common/INDEX.md`, and the matching machine's documentatio
 Start with the recorded solution, checking hardware, dependencies, and version
 assumptions. Examples and retired recipes are not restore candidates.
 
+Before applying **any** playbook, including one marked verified or named by the
+user, follow `AGENTS.md`'s fresh restore preflight. Check whether current
+Omarchy/upstream behavior makes the fix obsolete or incompatible, and whether
+its changes could break the current system. Recheck the provenance and current
+trust of external projects before installing or running them. If a kit could
+cause harm, explain the concrete conflict to the user and stop that kit. If
+the source cannot be verified, defer the affected external step. Report why a
+kit is applied, skipped, or stopped; do not blindly replay old instructions.
+
 Use existing user authorization; clarify only unresolved choices. After a proven
 new fix, propose a machine-specific or common record. Saving locally and pushing
 to GitHub are separate actions; follow the scope the user authorized.

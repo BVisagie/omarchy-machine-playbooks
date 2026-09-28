@@ -19,6 +19,9 @@ kit as you go, then use it after a reinstall with a simple request:
 Use this GitHub template to create your own repository. A private repository is
 recommended for personal machine information. Then:
 
+Review the selected checkout's `AGENTS.md` and awareness playbook against the
+current system before running its installer. Awareness is also a restore step.
+
 ```bash
 git clone git@github.com:<you>/<your-playbooks>.git ~/Work/machine-playbooks
 cd ~/Work/machine-playbooks
@@ -28,6 +31,9 @@ cd ~/Work/machine-playbooks
 
 Requires Bash and Python 3. Install as your normal user, without sudo. Custom
 clone locations work: the installer records the absolute repository path.
+For every later kit, ask the agent to do the fresh relevance, compatibility,
+and external-source preflight first; a past `verified` label does not
+authorize replaying it unchanged.
 Start a new agent session so it can discover the installed skill.
 
 Copy `machines/_template/` to a directory named after your static hostname.

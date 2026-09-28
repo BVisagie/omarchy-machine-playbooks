@@ -43,6 +43,16 @@ relevant plugin versions, hardware, commands/results, and any unknowns.
 Document cold boot, suspend/resume, and physical symptoms separately from
 file installation and mocked tests. Record power/performance tradeoffs where relevant.
 
+Give a future restorer enough information to repeat the fresh preflight in
+`AGENTS.md`: state the versions and behavior the workaround assumes, the
+upstream issue or documentation that explains why it was needed, and any
+known conflicting defaults or changes. For external projects, name the
+canonical source and install channel, the release or commit used, and the
+publisher's signature or checksum procedure when available. Record known
+security or maintenance concerns and a supported alternative or fallback.
+These notes are evidence from the time of writing, never a substitute for
+checking current relevance and trust before the next restore.
+
 ## Script behavior
 
 Check target hardware and dependencies before mutations. Avoid broad device
